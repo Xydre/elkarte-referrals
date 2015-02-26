@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<!DOCTYPE package-info SYSTEM "http://www.elkarte.net/site/package-info">
+<package-info xmlns="http://www.elkarte.net/site/package-info" xmlns:elk="http://www.elkarte.net/">
+	<name>Referrals</name>
+	<id>ant59:referrals</id>
+	<type>addon</type>
+	<version>1.0.0</version>
+
+	<install for="1.0 - 1.0.99">
+		<readme type="file" parsebbc="true">readme.txt</readme>
+		<license type="inline">This Elkarte addon is released under a BSD-3-Clause license.</license>
+		<database type="file">install.php</database>
+		<require-file name="Referrals.controller.php" destination="CONTROLLERDIR" />
+		<require-file name="Referrals.integration.php" destination="SOURCEDIR" />
+		<hook hook="integrate_actions" file="SOURCEDIR/Referrals.integration.php" function="ia_referrals" />
+		<hook hook="integrate_register_after" file="SOURCEDIR/Referrals.integration.php" function="ira_referrals" />
+	</install>
+
+	<uninstall for="1.0 - 1.0.99">
+		<hook reverse="true" hook="integrate_actions" file="SOURCEDIR/Referrals.integration.php" function="ia_referrals" />
+		<hook reverse="true" hook="integrate_register_after" file="SOURCEDIR/Referrals.integration.php" function="ira_referrals" />
+		<remove-file name="CONTROLLERDIR/Referrals.controller.php" />
+		<remove-file name="SOURCEDIR/Referrals.integration.php" />
+	</uninstall>
+
+</package-info>
