@@ -14,11 +14,13 @@
 		<require-file name="Referrals.integration.php" destination="SOURCEDIR" />
 		<hook hook="integrate_actions" file="SOURCEDIR/Referrals.integration.php" function="ia_referrals" />
 		<hook hook="integrate_register_after" file="SOURCEDIR/Referrals.integration.php" function="ira_referrals" />
+		<hook hook="integrate_load_custom_profile_fields" file="SOURCEDIR/Referrals.integration.php" function="ilcpf_referrals" />
 	</install>
 
 	<uninstall for="1.0 - 1.0.99">
 		<hook reverse="true" hook="integrate_actions" file="SOURCEDIR/Referrals.integration.php" function="ia_referrals" />
 		<hook reverse="true" hook="integrate_register_after" file="SOURCEDIR/Referrals.integration.php" function="ira_referrals" />
+		<hook reverse="true" hook="integrate_load_custom_profile_fields" file="SOURCEDIR/Referrals.integration.php" function="ilcpf_referrals" />
 		<remove-file name="CONTROLLERDIR/Referrals.controller.php" />
 		<remove-file name="SOURCEDIR/Referrals.integration.php" />
 	</uninstall>
