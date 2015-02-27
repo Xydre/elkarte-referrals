@@ -49,30 +49,42 @@ function ira_referrals($regOptions, $memberID)
 
 function ilcpf_referrals($memID, $area)
 {
-	global $context;
+	global $context, $user_info, $scripturl;
 
-	if ($area != 'register' || !isset($_SESSION['referred_by']) || empty($_SESSION['referred_by']))
-		return;
+	if ($area == 'register' && isset($_SESSION['referred_by']) && !empty($_SESSION['referred_by']))
+	{
+		$db = database();
 
-	$db = database();
+		$request = $db->query('', '
+			SELECT real_name FROM {db_prefix}members
+			WHERE id_member = {int:member_id}',
+			array(
+				'member_id' => $_SESSION['referred_by'],
+			)
+		);
+		$member = $db->fetch_assoc($request);
+		$db->free_result($request);
 
-	$request = $db->query('', '
-		SELECT real_name FROM {db_prefix}members
-		WHERE id_member = {int:member_id}',
-		array(
-			'member_id' => $_SESSION['referred_by'],
-		)
-	);
-	$member = $db->fetch_assoc($request);
-	$db->free_result($request);
-
-	$context['custom_fields'][] = array(
+		$context['custom_fields'][] = array(
 			'name' => 'Referred By',
 			'type' => 'text',
 			'input_html' => '<input type="text" value="'.$member['real_name'].'" name="customfield[referred_by]" readonly />',
 			'colname' => 'referred_by',
 			'value' => $_SESSION['referred_by'],
 			'show_reg' => 2,
-	);
-	$context['custom_fields_required'] = true;
+		);
+		$context['custom_fields_required'] = true;
+	}
+
+	if ($area == 'summary' && $memID == $user_info['id'])
+	{
+		$base_link = $scripturl.'?action=referral;id=%d';
+		$link = sprintf($base_link, $memID);
+
+		$context['custom_fields'][] = array(
+			'name' => 'Referral Link',
+			'type' => 'text',
+			'output_html' => '<input type="text" value="'.$link.'" readonly />',
+		);
+	}
 }
